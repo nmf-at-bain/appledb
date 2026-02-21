@@ -1,0 +1,24 @@
+name: fork-sync
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Runs at 50 minutes past every hour
+  workflow_dispatch:      # Allows you to run it manually with a button click
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Standard checkout of your fork
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          ref: main # The branch in your fork you want to update
+
+      # Step 2: Run the Sync-Fork-action
+      - name: Sync with Upstream
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
+        with:
+          upstream_repository: littlebyteorg/appledb
+          upstream_branch: main       # The branch to pull from the original repo
+          target_branch: main         # The branch to push to in your fork
+          github_token: ${{ secrets.GITHUB_TOKEN }}
