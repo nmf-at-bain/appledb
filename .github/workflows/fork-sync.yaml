@@ -15,8 +15,8 @@ jobs:
           ref: main # The branch in your fork you want to update
 
       # Step 2: Run the Sync-Fork-action
-      - name: Sync with Upstream
-        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
+      - name: Sync-Fork-action
+        uses: XueMoMo/Sync-Fork-action@v1.0.6
         with:
           upstream_repository: littlebyteorg/appledb
           upstream_branch: main       # The branch to pull from the original repo
