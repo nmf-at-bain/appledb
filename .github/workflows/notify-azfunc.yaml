@@ -1,0 +1,36 @@
+name: notify-azfunc
+on:
+  push:
+    paths:
+      - 'osFiles/iOS/**'
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Added Files and Notify Azure
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 1. We get the list and save it to a temporary file called 'list.txt'
+          # This prevents the shell from mangling the string
+          gh api repos/${{ github.repository }}/commits/${{ github.sha }} \
+            --jq '.files[] | select(.status == "added") | .filename' > list.txt
+
+          # 2. We read that file line by line
+          while IFS= read -r FILE_PATH; do
+            # Skip empty lines
+            [ -z "$FILE_PATH" ] && continue
+
+            echo "Found file: $FILE_PATH"
+
+            # 3. THIS IS THE SEND: It sends the JSON payload to your Function
+            # The -d (data) flag creates the body your Azure Function reads
+            curl -X POST "${{ secrets.AZURE_FUNCTION_URL }}?code=${{ secrets.FUNCTION_KEY }}" \
+              -H "Content-Type: application/json" \
+              -d "{\"filePath\": \"$FILE_PATH\"}"
+
+          done < list.txt
