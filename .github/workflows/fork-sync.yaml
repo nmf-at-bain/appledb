@@ -8,17 +8,19 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Standard checkout of your fork
-      - name: Checkout target branch
-        uses: actions/checkout@v4
+      - name: Checkout Forked Repository
+        uses: actions/checkout@v3
         with:
-          ref: main # The branch in your fork you want to update
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
-      # Step 2: Run the Sync-Fork-action
-      - name: Sync-Fork-action
-        uses: XueMoMo/Sync-Fork-action@v1.0.6
-        with:
-          upstream_repository: littlebyteorg/appledb
-          upstream_branch: main       # The branch to pull from the original repo
-          target_branch: main         # The branch to push to in your fork
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add Upstream Remote
+        run: git remote add upstream https://github.com/littlebyteorg/appledb.git
+
+      - name: Fetch Upstream Changes
+        run: git fetch upstream
+
+      - name: Merge Changes and Push
+        run: |
+          git checkout main
+          git merge upstream/main
+          git push origin main
