@@ -43,7 +43,8 @@ added_builds = {
     '23A355': ['23A357'],
     '23A8355': ['23A8357'],
     '23B85': ['23B82'],
-    '23C55': ['23C52', 'iOS;23C54']
+    '23C55': ['23C52', 'iOS;23C54'],
+    '23D127': ['23D125'],
 }
 
 ignore_builds = {
@@ -110,6 +111,8 @@ default_mac_devices = [
     'Mac16,12',         # Covers Sequoia 15.2 forked builds
     'Mac16,9',          # Covers Sequoia 15.3 forked builds
     'Mac17,2',          # Covers Tahoe 26.0 forked builds
+    'Mac17,3',          # Covers Tahoe 26.2 forked builds
+    'Mac17,5',          # Covers Tahoe 26.3 forked builds
     'VirtualMac2,1'     # Always include
 ]
 
@@ -245,6 +248,9 @@ default_mac_device_extensions = {
     'Mac17,3': set([
         'Mac17,3',
         'Mac17,4',
+        'Mac17,5'
+    ]),
+    'Mac17,6': set([
         'Mac17,6',
         'Mac17,7',
         'Mac17,8',
